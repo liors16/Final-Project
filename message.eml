@@ -1,0 +1,260 @@
+Delivered-To: liorsol1610@gmail.com
+Received: by 2002:a17:906:4441:b0:a27:9dad:b4d3 with SMTP id i1csp4769785ejp;
+        Sun, 7 Jan 2024 04:52:04 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHOsUUmaQ3LVBXf1bc63inLoY+ZM4TsQLgkQv6hfXWeUcMvsCVoFDznjB7ypj8NQKriCiSE
+X-Received: by 2002:a05:6214:1d0e:b0:67f:12bb:6c06 with SMTP id e14-20020a0562141d0e00b0067f12bb6c06mr2383195qvd.36.1704631924290;
+        Sun, 07 Jan 2024 04:52:04 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1704631924; cv=none;
+        d=google.com; s=arc-20160816;
+        b=yzwG7G+DJIpycAYPYGWK/XGiyijvVcjVFBXlHnQbT48XvFmm31rBZe/zDY03x/UwSQ
+         HBV3XLBKQNYcF14p6GKH/ISofDOYG+vu+NOsVtH+7Ad7UvP9s42fSdQO+fsCqAPb4hfe
+         YD8ZdRDbYtzzz1OKcb8cvDDcjLxCzsUhPMeb1+0K9HrvvDeb64SJokvmGAG4FEfkuGhx
+         2WpDDb+7C3whztLrZ4C7AhH0bn2CdLB9Yp3KlAfbAczsZTfKvBSSy5xkoaRIl4JGn1+k
+         OUYiAWyV2jL5B9zswP5Z9RDbvZvPEY7ca7AXolO/5Arlq2mbDWxmmZytScTySiudzZBX
+         UKew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;
+        h=feedback-id:mime-version:subject:message-id:to:reply-to:from:date
+         :dkim-signature:dkim-signature;
+        bh=IH2EuboPb1FCYPACPWOV1OnlXpXzJZR65nWEaOKxRh0=;
+        fh=JdZJl/2zFkDbc2QIQv7s0x5scZsN73WZ1/eNZpF0ehs=;
+        b=kwEBg1NVXd4baZOyB1x7g4FrHBVRsMKzhPCl0pFjvLOESBcH+tGqWTx7E/d4wMxd28
+         7Wg28ctgzu5kGxeKe4D7EE21Rt4FFClmErLMxqW+Q8itKd6oZ7/ZKLBGJKVPcs/qsNZ1
+         Y4U7QKSB8IzOJZRpbchE9AUcBEB/0xAk0uEJMpnXVGj/1bdcQzShKy+lkB/aqnzDxIBC
+         pUqn6/onbFP/Bpsg0QcT26SYKDDXpjhRFTryOO0Fqk6WVgn67F3wsydPA0AC2SylIxff
+         gufZ+GVtVRPPcrLGYP9T4SACCMJGWaEU9nNj64ohPsyL+ljzuyxJajbLcUwcVAO5gB3j
+         VL7Q==
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@jobs.imperva.com header.s=ax6u4ou3gpbstl2fzls75uhwq7kllaaw header.b=nzrnn6li;
+       dkim=pass header.i=@amazonses.com header.s=224i4yxa5dv7c2xz3womw6peuasteono header.b=h5ZzGosM;
+       spf=pass (google.com: domain of 0100018ce3faf084-dd183e4f-be02-4aeb-8750-69aa953fea1a-000000@amazonses.com designates 54.240.14.170 as permitted sender) smtp.mailfrom=0100018ce3faf084-dd183e4f-be02-4aeb-8750-69aa953fea1a-000000@amazonses.com;
+       dmarc=pass (p=QUARANTINE sp=NONE dis=NONE) header.from=imperva.com
+Return-Path: <0100018ce3faf084-dd183e4f-be02-4aeb-8750-69aa953fea1a-000000@amazonses.com>
+Received: from a14-170.smtp-out.amazonses.com (a14-170.smtp-out.amazonses.com. [54.240.14.170])
+        by mx.google.com with ESMTPS id os5-20020a05620a810500b007812e5a9151si5546621qkn.549.2024.01.07.04.52.03
+        for <liorsol1610@gmail.com>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 07 Jan 2024 04:52:04 -0800 (PST)
+Received-SPF: pass (google.com: domain of 0100018ce3faf084-dd183e4f-be02-4aeb-8750-69aa953fea1a-000000@amazonses.com designates 54.240.14.170 as permitted sender) client-ip=54.240.14.170;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@jobs.imperva.com header.s=ax6u4ou3gpbstl2fzls75uhwq7kllaaw header.b=nzrnn6li;
+       dkim=pass header.i=@amazonses.com header.s=224i4yxa5dv7c2xz3womw6peuasteono header.b=h5ZzGosM;
+       spf=pass (google.com: domain of 0100018ce3faf084-dd183e4f-be02-4aeb-8750-69aa953fea1a-000000@amazonses.com designates 54.240.14.170 as permitted sender) smtp.mailfrom=0100018ce3faf084-dd183e4f-be02-4aeb-8750-69aa953fea1a-000000@amazonses.com;
+       dmarc=pass (p=QUARANTINE sp=NONE dis=NONE) header.from=imperva.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=ax6u4ou3gpbstl2fzls75uhwq7kllaaw; d=jobs.imperva.com;
+	t=1704631923;
+	h=Date:From:Reply-To:To:Message-ID:Subject:MIME-Version:Content-Type;
+	bh=iDCkKR7WdZdPN2jA9zwwU3zelYOFsyUcxHjUKpBet+I=;
+	b=nzrnn6li3xjRt7ULhqljcIUpTURm9pI108OM/6J6PhlgrqdWBAznwKXMAweqzIbz
+	Fild0vlVvas+Rik+CLnbFFTFsJ/SOs/E9kcdEZb+3VjzPzD/JD7C8vLxsphbLMrKN+S
+	OgG4/NOrT/cTe8CX7lELfdNdoWpsm9wK8y0gBBzY=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=224i4yxa5dv7c2xz3womw6peuasteono; d=amazonses.com; t=1704631923;
+	h=Date:From:Reply-To:To:Message-ID:Subject:MIME-Version:Content-Type:Feedback-ID;
+	bh=iDCkKR7WdZdPN2jA9zwwU3zelYOFsyUcxHjUKpBet+I=;
+	b=h5ZzGosM30ybff1ZUcz0tZ5mKGY3aoQ+WGbSIgzUi2ssuoQDgboGtdJcJLqpdfgG
+	gzbLDM0qmL70qOv4yBARbMG7B9xQ7Xl+6yOnlnqbh1LGEVHSZ09FkegCpoE4hrAlMrx
+	3BWke2QdfZANwVS9eBoNg2IcOw3WtDt8kdAPdGpc=
+Date: Sun, 7 Jan 2024 12:52:02 +0000
+From: Imperva Recruiting Team <Recruiting.admin@jobs.imperva.com>
+Reply-To: "no-reply@jobvite.com" <no-reply@jobvite.com>
+To: Lior Arthur Soukhanov <liorsol1610@gmail.com>
+Message-ID: <0100018ce3faf084-dd183e4f-be02-4aeb-8750-69aa953fea1a-000000@email.amazonses.com>
+Subject: Your application for SOC Engineer - Application Security Expert at
+ Imperva
+MIME-Version: 1.0
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_83467_1612182810.1704631922644"
+X-JV-MAIL-ID: 20240107qoZ9Vfwb3936ede811b040058694007a8a702cc7
+Feedback-ID: 1.us-east-1.1WxhOW01lh+v8N6NW7cBp1Mv0W2bAx3dlxedXqPLh3k=:AmazonSES
+X-SES-Outgoing: 2024.01.07-54.240.14.170
+
+------=_Part_83467_1612182810.1704631922644
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.=
+w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html lang=3D"en" xml:lang=3D=
+"en" xmlns=3D"http://www.w3.org/1999/xhtml" style=3D"background:#f3f3f3!imp=
+ortant"><head><link href=3D"../../../../../../../assets/styles/foundation-e=
+mails/app.css" rel=3D"stylesheet" type=3D"text/css"><meta content=3D"text/h=
+tml; charset=3Dutf-8" http-equiv=3D"Content-Type"><meta content=3D"width=3D=
+device-width" name=3D"viewport"><style>@media only screen{html{min-height:1=
+00%;background:#f3f3f3}}@media only screen and (max-width:980px){.small-flo=
+at-center{margin:0 auto!important;float:none!important;text-align:center!im=
+portant}.small-text-center{text-align:center!important}.small-text-left{tex=
+t-align:left!important}.small-text-right{text-align:right!important}}@media=
+ only screen and (max-width:980px){.hide-for-large{display:block!important;=
+width:auto!important;overflow:visible!important;max-height:none!important;f=
+ont-size:inherit!important;line-height:inherit!important}}@media only scree=
+n and (max-width:980px){table.body table.container .hide-for-large,table.bo=
+dy table.container .row.hide-for-large{display:table!important;width:100%!i=
+mportant}}@media only screen and (max-width:980px){table.body table.contain=
+er .callout-inner.hide-for-large{display:table-cell!important;width:100%!im=
+portant}}@media only screen and (max-width:980px){table.body table.containe=
+r .show-for-large{display:none!important;width:0;mso-hide:all;overflow:hidd=
+en}}@media only screen and (max-width:980px){table.body img{width:auto;heig=
+ht:auto}table.body center{min-width:0!important}table.body .container{width=
+:95%!important}table.body .column,table.body .columns{height:auto!important=
+;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border=
+-box;padding-left:20px;padding-right:20px}table.body .column .column,table.=
+body .column .columns,table.body .columns .column,table.body .columns .colu=
+mns{padding-left:0;padding-right:0}table.body .collapse .column,table.body =
+.collapse .columns{padding-left:0!important;padding-right:0!important}table=
+.body table.columns td.expander,table.body table.columns th.expander{displa=
+y:none!important}table.body .right-text-pad,table.body .text-pad-right{padd=
+ing-left:10px!important}table.body .left-text-pad,table.body .text-pad-left=
+{padding-right:10px!important}table.menu{width:100%!important}table.menu td=
+,table.menu th{width:auto!important;display:inline-block!important}table.me=
+nu.small-vertical td,table.menu.small-vertical th,table.menu.vertical td,ta=
+ble.menu.vertical th{display:block!important}table.menu[align=3Dcenter]{wid=
+th:auto!important}table.button.small-expand,table.button.small-expanded{wid=
+th:100%!important}table.button.small-expand table,table.button.small-expand=
+ed table{width:100%}table.button.small-expand table a,table.button.small-ex=
+panded table a{text-align:center!important;width:100%!important;padding-lef=
+t:0!important;padding-right:0!important}table.button.small-expand center,ta=
+ble.button.small-expanded center{min-width:0}}@media only screen and (max-w=
+idth:980px){.jv-logo-col{margin-top:25px!important}}@media only screen and =
+(max-width:480px){body,p,table.body,td,th{font-size:12px!important;line-hei=
+ght:1.3}table.button td a{font-size:12px!important;padding:15px 10px 15px 1=
+0px!important}table.body .section-description{margin-left:0!important;Margi=
+n-left:0!important}table.body .section-description .firstColumn{width:100% =
+important}table.body .section-description .gridColumn{padding:0 0 6px 0!imp=
+ortant;margin:0 0 6px 0!important;Margin:0 0 6px 0!important;width:100% imp=
+ortant}.hr-dotted{display:block!important;border-top:1px dotted #999}.paddi=
+ng-left-22{margin-left:10px!important;Margin-left:10px!important}.section-h=
+eading{color:#e86b0a;font-weight:700;margin-top:15px!important;Margin-top:1=
+5px!important;margin-bottom:15px!important;Margin-bottom:15px!important;pad=
+ding-top:0!important;padding-bottom:0!important}.jv-logo-col{margin-top:25p=
+x!important}table.body .container{width:95%!important}.hr-margin{margin-lef=
+t:0!important}td.small-1,th.small-1{display:inline-block!important;width:8.=
+33333%!important}td.small-2,th.small-2{display:inline-block!important;width=
+:16.66667%!important}td.small-3,th.small-3{display:inline-block!important;w=
+idth:25%!important}td.small-4,th.small-4{display:inline-block!important;wid=
+th:33.33333%!important}td.small-5,th.small-5{display:inline-block!important=
+;width:41.66667%!important}td.small-6,th.small-6{display:inline-block!impor=
+tant;width:50%!important}td.small-7,th.small-7{display:inline-block!importa=
+nt;width:58.33333%!important}td.small-8,th.small-8{display:inline-block!imp=
+ortant;width:66.66667%!important}td.small-9,th.small-9{display:inline-block=
+!important;width:75%!important}td.small-10,th.small-10{display:inline-block=
+!important;width:83.33333%!important}td.small-11,th.small-11{display:inline=
+-block!important;width:91.66667%!important}td.small-12,th.small-12{display:=
+inline-block!important;width:100%!important}.column td.small-12,.column th.=
+small-12,.columns td.small-12,.columns th.small-12{display:block!important;=
+width:100%!important}table.body td.small-offset-1,table.body th.small-offse=
+t-1{margin-left:8.33333%!important;Margin-left:8.33333%!important}table.bod=
+y td.small-offset-2,table.body th.small-offset-2{margin-left:16.66667%!impo=
+rtant;Margin-left:16.66667%!important}table.body td.small-offset-3,table.bo=
+dy th.small-offset-3{margin-left:25%!important;Margin-left:25%!important}ta=
+ble.body td.small-offset-4,table.body th.small-offset-4{margin-left:33.3333=
+3%!important;Margin-left:33.33333%!important}table.body td.small-offset-5,t=
+able.body th.small-offset-5{margin-left:41.66667%!important;Margin-left:41.=
+66667%!important}table.body td.small-offset-6,table.body th.small-offset-6{=
+margin-left:50%!important;Margin-left:50%!important}table.body td.small-off=
+set-7,table.body th.small-offset-7{margin-left:58.33333%!important;Margin-l=
+eft:58.33333%!important}table.body td.small-offset-8,table.body th.small-of=
+fset-8{margin-left:66.66667%!important;Margin-left:66.66667%!important}tabl=
+e.body td.small-offset-9,table.body th.small-offset-9{margin-left:75%!impor=
+tant;Margin-left:75%!important}table.body td.small-offset-10,table.body th.=
+small-offset-10{margin-left:83.33333%!important;Margin-left:83.33333%!impor=
+tant}table.body td.small-offset-11,table.body th.small-offset-11{margin-lef=
+t:91.66667%!important;Margin-left:91.66667%!important}}</style></head><body=
+ bgcolor=3D"#f3f3f3" style=3D"-moz-box-sizing:border-box;-ms-text-size-adju=
+st:100%;-webkit-box-sizing:border-box;-webkit-text-size-adjust:100%;Margin:=
+0;background:#f3f3f3!important;background-color:#f3f3f3;box-sizing:border-b=
+ox;color:#666;font-family:Helvetica,Arial,sans-serif;font-size:14px;font-we=
+ight:400;line-height:1.3;margin:0;min-width:100%;padding:0;text-align:left;=
+width:100%!important"><table class=3D"body" style=3D"Margin:0;background:#f=
+3f3f3!important;border-collapse:collapse;border-spacing:0;color:#666;font-f=
+amily:Helvetica,Arial,sans-serif;font-size:14px;font-weight:400;height:100%=
+;line-height:1.3;margin:0;padding:0;text-align:left;vertical-align:top;widt=
+h:100%"><tr style=3D"padding:0;text-align:left;vertical-align:top"><td clas=
+s=3D"center" align=3D"center" valign=3D"top" bgcolor=3D"#f3f3f3" style=3D"-=
+moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;background-color:#f3f3f3;bor=
+der-collapse:collapse!important;color:#666;font-family:Helvetica,Arial,sans=
+-serif;font-size:14px;font-weight:400;hyphens:auto;line-height:1.3;margin:0=
+;padding:0;text-align:left;vertical-align:top;word-wrap:break-word"><table =
+align=3D"center" class=3D"container jv-container" style=3D"Margin:0 auto;Ma=
+rgin-top:25px!important;background:#fefefe;background-color:#f3f3f3;border-=
+collapse:collapse;border-spacing:0;margin:0 auto;margin-top:25px!important;=
+max-width:960px!important;padding:0;text-align:inherit;vertical-align:top;w=
+idth:95%"><tbody><tr style=3D"padding:0;text-align:left;vertical-align:top"=
+><td style=3D"-moz-hyphens:auto;-webkit-hyphens:auto;Margin:0;border-collap=
+se:collapse!important;color:#666;font-family:Helvetica,Arial,sans-serif;fon=
+t-size:14px;font-weight:400;hyphens:auto;line-height:1.3;margin:0;padding:0=
+;text-align:left;vertical-align:top;word-wrap:break-word"><table class=3D"r=
+ow jv-table-bg" style=3D"background-color:#fff;border:1px solid #cbcbcb;bor=
+der-collapse:collapse;border-spacing:0;display:table;padding:0;position:rel=
+ative;text-align:left;vertical-align:top;width:100%"><tbody><tr style=3D"pa=
+dding:0;text-align:left;vertical-align:top"><th class=3D"small-12 large-12 =
+columns first last" style=3D"Margin:0 auto;color:#666;font-family:Helvetica=
+,Arial,sans-serif;font-size:14px;font-weight:400;line-height:1.3;margin:0 a=
+uto;padding:0;padding-bottom:20px;padding-left:20px;padding-right:20px;text=
+-align:left;width:940px"><table style=3D"border-collapse:collapse;border-sp=
+acing:0;padding:0;text-align:left;vertical-align:top;width:100%"><tbody><tr=
+ style=3D"padding:0;text-align:left;vertical-align:top"><th style=3D"Margin=
+:0;color:#666;font-family:Helvetica,Arial,sans-serif;font-size:14px;font-we=
+ight:400;line-height:1.3;margin:0;padding:0;text-align:left"><table height=
+=3D"100" class=3D"row jv-header" style=3D"border-collapse:collapse;border-s=
+pacing:0;display:table;height:100px;padding:0;position:relative;text-align:=
+left;vertical-align:top;width:100%"><tbody><tr style=3D"padding:0;text-alig=
+n:left;vertical-align:top"><th class=3D"jv-logo-col small-12 large-12 colum=
+ns first last" height=3D"100" valign=3D"middle" style=3D"Margin:0 auto;colo=
+r:#666;font-family:Helvetica,Arial,sans-serif;font-size:14px;font-weight:40=
+0;line-height:1.3;margin:0 auto;margin-bottom:0!important;padding:0;padding=
+-bottom:0!important;padding-left:0!important;padding-right:20px;text-align:=
+left;width:100%"><table style=3D"border-collapse:collapse;border-spacing:0;=
+padding:0;text-align:left;vertical-align:top;width:100%"><tbody><tr style=
+=3D"padding:0;text-align:left;vertical-align:top"><th style=3D"Margin:0;col=
+or:#666;font-family:Helvetica,Arial,sans-serif;font-size:14px;font-weight:4=
+00;line-height:1.3;margin:0;padding:0;text-align:left"><img class=3D"jv-log=
+o" style=3D"-ms-interpolation-mode:bicubic;clear:both;display:block;max-hei=
+ght:50px;max-width:100%;outline:0;text-decoration:none;width:auto" alt=3D"I=
+mperva" height=3D"50" src=3D"https://d3igejkwe1ucjd.cloudfront.net/company/=
+qoZ9Vfwb/assets/email/images/file/logoimperva1579602846279_1613311176403.pn=
+g"></th><th class=3D"expander" style=3D"Margin:0;color:#666;font-family:Hel=
+vetica,Arial,sans-serif;font-size:14px;font-weight:400;line-height:1.3;marg=
+in:0;padding:0!important;text-align:left;visibility:hidden;width:0"></th></=
+tr></tbody></table></th></tr></tbody></table>  <br />Dear Lior Arthur, <br =
+/> <br />Thank you for giving us the opportunity to consider you for the SO=
+C Engineer - Application Security Expert role at Imperva. We have reviewed =
+your background and qualifications for the role and at this point, we are g=
+oing to move forward with candidates who are a closer match with our needs.=
+ <br /> <br />I would like to suggest that you sign up for Imperva job noti=
+fications, allowing us to email you when we open a job that fits your skill=
+s and interests. Go to http://www.imperva.com/Company/Careers?jvk=3Dnotify.=
+ <br /> <br />Alternatively, you can review other roles open right now, and=
+ apply to any for which you feel well-qualified. To review open roles, go t=
+o http://www.imperva.com/Company/Careers. <br /> <br />In either case, we w=
+ould be glad to review your credentials against new positions. <br /> <br /=
+>We very much appreciate your time and interest in Imperva and wish you eve=
+ry success in your job search and career. <br /> <br />Regards, <br /> <br =
+/>Imperva Recruiting Team</th></tr></tbody></table></th></tr></tbody></tabl=
+e><table class=3D"row center jv-footer-container" style=3D"Margin-top:10px!=
+important;background-color:#f3f3f3;border-collapse:collapse;border-spacing:=
+0;display:table;margin-top:10px!important;padding:0;position:relative;text-=
+align:left;vertical-align:top;width:100%"><tbody><tr style=3D"padding:0;tex=
+t-align:left;vertical-align:top"><th class=3D"small-12 large-12 columns fir=
+st last" style=3D"Margin:0 auto;color:#666;font-family:Helvetica,Arial,sans=
+-serif;font-size:14px;font-weight:400;line-height:1.3;margin:0 auto;padding=
+:0;padding-bottom:20px;padding-left:20px;padding-right:20px;text-align:left=
+;width:940px"><table style=3D"border-collapse:collapse;border-spacing:0;pad=
+ding:0;text-align:left;vertical-align:top;width:100%"><tbody><tr style=3D"p=
+adding:0;text-align:left;vertical-align:top"><th style=3D"Margin:0;color:#6=
+66;font-family:Helvetica,Arial,sans-serif;font-size:14px;font-weight:400;li=
+ne-height:1.3;margin:0;padding:0;text-align:left"><span class=3D"jv-footer-=
+identifier" style=3D"display:none">-*_____</span>  <table class=3D"row" sty=
+le=3D"border-collapse:collapse;border-spacing:0;display:table;padding:0;pos=
+ition:relative;text-align:left;vertical-align:top;width:100%"><tbody><tr st=
+yle=3D"padding:0;text-align:left;vertical-align:top"><p style=3D"Margin:0;M=
+argin-bottom:10px;color:#666;font-family:Helvetica,Arial,sans-serif;font-si=
+ze:12.6px;font-weight:400;line-height:1.3;margin:0;margin-bottom:10px;paddi=
+ng:0;text-align:left"> <a href=3D"https://app.jobvite.com/l?ksrDxJkw9" styl=
+e=3D"color:#666666"><b>Email Preferences</b></a> |      <a href=3D"https://=
+www.jobvite.com/" style=3D"color:#666666"><b>Powered by Jobvite</b></a> </p=
+></tr></tbody></table><span class=3D"jv-footer-identifier" style=3D"display=
+:none">*______*</span></th></tr></tbody></table></th></tr></tbody></table><=
+/td></tr></tbody></table></td></tr></table><!-- prevent Gmail on iOS font s=
+ize manipulation --><div style=3D"display:none;white-space:nowrap;font:15px=
+ courier;line-height:0"></div></body></html>
+------=_Part_83467_1612182810.1704631922644--
