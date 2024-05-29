@@ -3,3 +3,4 @@ message1.eml
 .DS_Store
 .idea
 venv
+config.py

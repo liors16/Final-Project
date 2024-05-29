@@ -1,10 +1,10 @@
 from EmailHeaderExtractor import ParseHeaders
 from Detections import Detections
-import os
 import json
+import config
 
-API_KEY_VIRUSTOTAL = os.environ.get('API_KEY_VIRUSTOTAL')
-API_KEY_ABUSEIPDB = os.environ.get('API_KEY_ABUSEIPDB')
+print("API_KEY_VIRUSTOTAL:", config.API_KEY_VIRUSTOTAL)
+print("API_KEY_ABUSEIPDB:", config.API_KEY_ABUSEIPDB)
 
 def main():
 
@@ -13,8 +13,8 @@ def main():
 
     # Contains the dictionary of the message headers and message content
     header_parser = ParseHeaders(eml_file_path)
-    detections_instance = Detections(header_parser, API_KEY_VIRUSTOTAL)  # For VirusTotal API
-    detections_instance2 = Detections(header_parser, API_KEY_ABUSEIPDB)  # For AbuseIPDB API
+    detections_instance = Detections(header_parser, config.API_KEY_VIRUSTOTAL)  # For VirusTotal API
+    detections_instance2 = Detections(header_parser, config.API_KEY_ABUSEIPDB)  # For AbuseIPDB API
 
     # Parse headers
     headers_dict, message_content = header_parser.parse_headers()
