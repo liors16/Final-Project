@@ -9,7 +9,7 @@ API_KEY_ABUSEIPDB = os.environ.get('API_KEY_ABUSEIPDB')
 def main():
 
     # EML file path, it's just file name for now (temporary)
-    eml_file_path = 'message.eml'
+    eml_file_path = 'message1.eml'
 
     # Contains the dictionary of the message headers and message content
     header_parser = ParseHeaders(eml_file_path)
