@@ -1,5 +1,12 @@
 message.eml
 message1.eml
+message2.eml
+tst1.eml
+tst2.eml
+Check_hyper_link_in_word.eml
+Check_this_tst_please.eml
+attached_sus_link_in_word.docx
+msg_with_attached_file.docx
 .DS_Store
 .idea
 venv

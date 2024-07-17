@@ -1,6 +1,7 @@
 import json
 from concurrent.futures import ThreadPoolExecutor
 import requests
+import time
 
 class Detections:
     def __init__(self, header_parser, api_key):
@@ -56,11 +57,6 @@ class Detections:
         dkim_result = self.check_DKIM_record()
         dmarc_result = self.check_DMARC_record()
 
-        # Print results of SPF, DKIM, DMARC
-        print(f"SPF Record Result: {spf_result}")
-        print(f"DKIM Record Result: {dkim_result}")
-        print(f"DMARC Record Result: {dmarc_result}")
-
         return spf_result, dkim_result, dmarc_result
 
 # -------------------------------- Attached URLs detections -------------------------------- #
@@ -72,39 +68,42 @@ class Detections:
         try:
             response = requests.get(url_analysis_endpoint, params=params)
             if response.status_code == 200:
-                analysis_result = response.json()
-                print("Positives:", analysis_result['positives'])
-                print("Total Scans:", analysis_result['total'])
-
-                # for scanner, result in analysis_result['scans'].items():
-                #     print(f"- {scanner}: {result['result']}")
-                # print(response.json())
                 return response.json()
 
+            else:
+                print(f"THE CODE OF ERROR IS: {url} {response.status_code}")
+
         except requests.RequestException as e:
-            print(f"An error occurred while scanning {url} with VirusTotal: {e}")
+            print(f"There is an error while scanning {url} with VirusTotal: {e}")
             return None
 
 # -------------------------------- IP Addresses detections -------------------------------- #
-    def check_ip_address(self, ip_addr):
-        # Defining the api-endpoint
-        url = 'https://api.abuseipdb.com/api/v2/check'
 
+    def check_ip_address(self, ip_addr):
+        url = 'https://api.abuseipdb.com/api/v2/check'
         querystring = {
             'ipAddress': ip_addr,
             'maxAgeInDays': '365'
         }
-
         headers = {
             'Accept': 'application/json',
             'Key': self.api_key
         }
 
-        response = requests.request(method='GET', url=url, headers=headers, params=querystring)
+        try:
+            response = requests.get(url, headers=headers, params=querystring)
+            response.raise_for_status()  # Exception for bad status codes
 
-        # Formatted output
-        decoded_response = json.loads(response.text)
-        print(json.dumps(decoded_response, sort_keys=True, indent=4))
+            # Check if response content is JSON
+            try:
+                decoded_response = response.json()
+                return decoded_response
+            except json.JSONDecodeError as je:
+                print(f"Error decoding JSON response for IP {ip_addr}: {je}")
+                return None
+        except requests.RequestException as e:
+            print(f"An error occurred while checking IP {ip_addr} with AbuseIPDB: {e}")
+            return None
 
     def check_ip_addresses_multithreaded(self, ip_addresses):
         with ThreadPoolExecutor() as executor:
@@ -114,7 +113,7 @@ class Detections:
 # -------------------------------- The HTML content of message detections -------------------------------- #
     def get_html_content(self, link):
         try:
-            print("The link address is: " + link)
+            # print("The link address is: " + link)
             response = requests.get(link)
             if response.status_code == 200:
                 return response.text
@@ -126,4 +125,83 @@ class Detections:
             print(f"An error occurred while fetching HTML content from {link}: {e}")
             return None
 
+# -------------------------------- The attached files scanning -------------------------------- #
+    def scan_file(self, file_path):
+        url_scan_endpoint = "https://www.virustotal.com/vtapi/v2/file/scan"
+        url_report_endpoint = "https://www.virustotal.com/vtapi/v2/file/report"
+        params = {'apikey': self.api_key}
+
+        try:
+            with open(file_path, 'rb') as file:
+                files = {'file': file}
+                # Step 1: Submit file for scanning
+                response = requests.post(url_scan_endpoint, params=params, files=files)
+                if response.status_code == 200:
+                    result = response.json()
+                    scan_id = result.get('scan_id', '')
+                    resource = result.get('resource', '')
+                    if not scan_id or not resource:
+                        print(f"Failed to get scan ID or resource for {file_path}")
+                        return None
+
+                    # Step 2: Poll for scan results using scan_id
+                    params['resource'] = resource
+                    params['scan_id'] = scan_id
+                    retry_count = 0
+                    while retry_count < 5:  # Retry 5 times with a delay
+                        retry_count += 1
+                        response = requests.get(url_report_endpoint, params=params)
+                        if response.status_code == 200:
+                            report = response.json()
+                            if report.get('response_code') == 1:
+                                return report  # Return full scan report
+                            elif report.get('response_code') == -2:
+                                print(f"Scan still queued for {file_path}. Waiting for results...")
+                                time.sleep(60)  # Wait for 60 seconds before retrying
+                            else:
+                                print(f"No scan results found for {file_path}")
+                                return None
+                        else:
+                            print(f"Failed to retrieve scan report for {file_path}. Status code: {response.status_code}")
+                            return None
+
+                    print(f"Exceeded retry limit for {file_path}. No scan results found.")
+                    return None
+                else:
+                    print(f"Failed to scan {file_path}. Status code: {response.status_code}")
+                    return None
+        except IOError as e:
+            print(f"Error reading file {file_path}: {e}")
+            return None
+
+# -------------------------------- The sender domain name scanning -------------------------------- #
+    def check_domain(self, domain):
+        url_domain_report_endpoint = "https://www.virustotal.com/vtapi/v2/domain/report"
+        params = {'apikey': self.api_key, 'domain': domain}
+
+        try:
+            response = requests.get(url_domain_report_endpoint, params=params)
+            if response.status_code == 200:
+                analysis_result = response.json()
+                positives = 0
+                total = 0
+
+                # Sum up positives and total from different sections of the response
+                if 'undetected_referrer_samples' in analysis_result:
+                    for sample in analysis_result['undetected_referrer_samples']:
+                        positives += sample['positives']
+                        total += sample['total']
+                if 'detected_downloaded_samples' in analysis_result:
+                    for sample in analysis_result['detected_downloaded_samples']:
+                        positives += sample['positives']
+                        total += sample['total']
+                if 'undetected_downloaded_samples' in analysis_result:
+                    for sample in analysis_result['undetected_downloaded_samples']:
+                        positives += sample['positives']
+                        total += sample['total']
+
+                return {'positives': positives, 'total': total}
+        except requests.RequestException as e:
+            print(f"An error occurred while scanning domain {domain} with VirusTotal: {e}")
+            return None
 

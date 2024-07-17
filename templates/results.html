@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Body and general container styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .results {
+            margin-top: 20px;
+        }
+
+        /* Styling for result sections and items */
+        .result-section {
+            margin-bottom: 30px;
+        }
+        .result-item {
+            padding: 15px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .result-key {
+            font-weight: bold;
+            color: #007bff; /* Blue color for key */
+        }
+        .list-group {
+            margin-top: 10px;
+        }
+        .list-group-item {
+            padding: 8px;
+            border: none;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+                margin: 20px auto;
+            }
+            h1 {
+                font-size: 24px;
+                margin-bottom: 10px;
+            }
+            .result-item {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Results</h1>
+        <div class="results">
+            {% if results %}
+                <!-- Headers Section -->
+                <div class="result-section">
+                    <h2>Headers</h2>
+                    <div class="list-group">
+                        {% for key, value in results.headers.items() %}
+                            {% if key in ['Date', 'Subject', 'From', 'To', 'Return-Path'] %}
+                                <div class="list-group-item result-item">
+                                    <span class="result-key">{{ key }}:</span> {{ value }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Message Content Section -->
+                <div class="result-section">
+                    <h2>Message Content</h2>
+                    <div class="list-group">
+                        <div class="list-group-item result-item">
+                            <span class="result-key">Content:</span> {{ results.message_content }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SPF, DKIM, DMARC Results Section -->
+                <div class="result-section">
+                    <h2>SPF, DKIM, DMARC Results</h2>
+                    <div class="list-group">
+                        <div class="list-group-item result-item">
+                            <span class="result-key">SPF:</span> {% if results.spf_result %}pass{% else %}fail{% endif %}
+                        </div>
+                        <div class="list-group-item result-item">
+                            <span class="result-key">DKIM:</span> {% if results.dkim_result %}pass{% else %}fail{% endif %}
+                        </div>
+                        <div class="list-group-item result-item">
+                            <span class="result-key">DMARC:</span> {% if results.dmarc_result %}pass{% else %}fail{% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Links Results Section -->
+                <div class="result-section">
+                    <h2>Links Results</h2>
+                    <div class="list-group">
+                        {% for link, result in results.link_results.items() %}
+                            <div class="list-group-item result-item">
+                                <span class="result-key">Link:</span> {{ link }}<br>
+                                <span class="result-key">Total Engines Scanned:</span> {{ result.total }}<br>
+                                <span class="result-key">Positives:</span> {{ result.positives }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- IP Results Section -->
+                <div class="result-section">
+                    <h2>IP Results</h2>
+                    <div class="list-group">
+                        {% for ip, result in results.ip_results.items() %}
+                            <div class="list-group-item result-item">
+                                <span class="result-key">IP Address:</span> {{ ip }}<br>
+                                <span class="result-key">Is Public:</span> {{ result.data.isPublic }}<br>
+                                <span class="result-key">Is Whitelisted:</span> {{ result.data.isWhitelisted }}<br>
+                                <span class="result-key">Abuse Confidence Score:</span> {{ result.data.abuseConfidenceScore }}<br>
+                                <span class="result-key">Country Code:</span> {{ result.data.countryCode }}<br>
+                                <span class="result-key">Usage Type:</span> {{ result.data.usageType }}<br>
+                                <span class="result-key">ISP:</span> {{ result.data.isp }}<br>
+                                <span class="result-key">Domain:</span> {{ result.data.domain }}<br>
+                                <span class="result-key">Hostnames:</span> {{ result.data.hostnames | join(', ') }}<br>
+                                <span class="result-key">Total Reports:</span> {{ result.data.totalReports }}<br>
+                                <span class="result-key">Number of Distinct Users:</span> {{ result.data.numDistinctUsers }}<br>
+                                <span class="result-key">Last Reported At:</span> {{ result.data.lastReportedAt }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Domains Section -->
+                <div class="result-section">
+                    <h2>Domains Results</h2>
+                    <div class="list-group">
+                        {% for domain, analysis_result in results.domain_results.items() %}
+                            <div class="list-group-item result-item">
+                                <span class="result-key">Domain:</span> {{ domain }}<br>
+                                {% if analysis_result.total is defined %}
+                                    <span class="result-key">Total Engines Scanned:</span> {{ analysis_result.total }}<br>
+                                {% endif %}
+                                {% if analysis_result.positives is defined %}
+                                    <span class="result-key">Positives:</span> {{ analysis_result.positives }}<br>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Domain Match Section -->
+                <div class="result-section">
+                    <h2>Domain Headers Matching Results</h2>
+                    <div class="list-group">
+                        <div class="list-group-item result-item">
+                            <span class="result-key">"From" Header Domain Name:</span> {{ results.domain_match[0] }}
+                        </div>
+                        <div class="list-group-item result-item">
+                            <span class="result-key">"Received" Header Domain Name:</span> {{ results.domain_match[1] }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Attachments Section -->
+                <div class="result-section">
+                    <h2>Attachments Results</h2>
+                    <div class="list-group">
+                        {% for filename, result in results.attachments.items() %}
+                            <div class="list-group-item result-item">
+                                <span class="result-key">Attached File Name: {{ filename }}</span><br>
+                                <span class="result-key">MD5:</span> {{ result.md5 }}<br>
+                                <span class="result-key">Permalink:</span> <a href="{{ result.permalink }}">{{ result.permalink }}</a><br>
+                                <span class="result-key">Positives:</span> {{ result.positives }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            {% else %}
+                <p>No results to display.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
