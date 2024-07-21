@@ -4,7 +4,6 @@ idna==3.6
 requests==2.31.0
 urllib3==2.2.1
 pymongo~=4.7.2
-tkinterdnd2~=0.3.0
 flask~=3.0.3
 werkzeug~=3.0.3
 pypdf2~=3.0.1
