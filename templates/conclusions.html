@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conclusions</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .conclusion {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .btn-view-details {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .btn-view-details:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+        .warning-text {
+            color: red;
+            font-weight: bold;
+            display: block; /* Ensures each warning text is on a new line */
+            margin-top: 5px; /* Adds a small space above each warning text */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Conclusions</h1>
+        <div class="conclusion">
+            {% if conclusions.is_malicious %}
+                <p>The message is <strong>malicious</strong> due to the following reasons:</p>
+                <ul>
+                    {% if not conclusions.spf_result %}
+                        <li>The SPF check failed</li>
+                    {% endif %}
+                    {% if not conclusions.dkim_result %}
+                        <li>The DKIM check failed</li>
+                    {% endif %}
+                    {% if not conclusions.dmarc_result %}
+                        <li>The DMARC check failed</li>
+                    {% endif %}
+                    {% for link, result in conclusions.link_results.items() %}
+                        {% if result.positives > 0 %}
+                            <li>The attached link: "{{ link }}" was found to be malicious.
+                                <span class="warning-text">Be careful not to click on the link!</span>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    {% for ip, result in conclusions.ip_results.items() %}
+                        {% if result.data.abuseConfidenceScore > 0 %}
+                            <li>The IP Address: {{ ip }} that sent the message is malicious.
+                                <span class="warning-text">Be careful not to send sensitive details and avoid communicating with the above address!</span>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    {% for domain, result in conclusions.domain_results.items() %}
+                        {% if result.positives > 0 %}
+                            <li>The Domain {{ domain }} has {{ result.positives }} positives</li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if not conclusions.domain_match %}
+                        <li>The "from" header domain: "{{ conclusions.domain_from }}", is different from
+                            <br>
+                            "Received" header domain: "{{conclusions.domain_received}}".
+                            <br>
+                            <span class="warning-text">
+                            This usually indicates email spoofing.<br>
+                            Do not provide sensitive information, click on links, or download attachments.
+                            </span>
+                        </li>
+                    {% endif %}
+                    {% for filename, result in conclusions.attachments.items() %}
+                        {% if result.positives > 0 %}
+                            <li>The Attachment {{ filename }} was found to be malicious.
+                                <span class="warning-text">Be careful and do not open the attached file!</span>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>The message is <strong>legitimate</strong> and not suspicious.</p>
+            {% endif %}
+        </div>
+        <a href="{{ url_for('results', detection_results=detection_results) }}" class="btn-view-details">Display Advanced Scanning Results</a>
+    </div>
+</body>
+</html>
+
+
