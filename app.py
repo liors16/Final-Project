@@ -1,13 +1,31 @@
-import os
-import json
 from flask import Flask, render_template, request, flash, redirect, url_for
 from werkzeug.utils import secure_filename
+import os
+import json
 from ParseHeaders import ParseHeaders
 from Detections import Detections
+from AttackPathByGPT import AttackPathByGPT
 import config
+import re
 
 app = Flask(__name__)
 app.config['ALLOWED_EXTENSIONS'] = {'eml'}
+
+# Custom nl2br filter
+def nl2br(value):
+    return value.replace('\n', '<br>\n')
+
+
+app.jinja_env.filters['nl2br'] = nl2br
+
+
+@app.template_filter('format_chatgpt_response')
+def format_chatgpt_response(text):
+    # Define the patterns for titles with case-insensitivity
+    formatted_text = re.sub(r'(?i)^(attack type|attack path|summary):',
+                            r'<span class="highlight-title">\1:</span>', text, flags=re.MULTILINE)
+    return formatted_text
+
 
 class DetectionResults:
     def __init__(self):
@@ -81,7 +99,7 @@ def upload_file():
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
 
-        # Determine the project directory
+        # The project directory
         project_dir = os.path.dirname(__file__)
 
         # Save file to the project directory
@@ -89,8 +107,13 @@ def upload_file():
         file.save(file_path)
 
         detection_results = process_file(file_path)
+
+        analyzer = AttackPathByGPT(detection_results, config.API_KEY_CHATGPT)
+        chatgpt_response = analyzer.analyze()
+
         conclusions = generate_conclusions(detection_results)
-        return redirect(url_for('conclusions', conclusions=json.dumps(conclusions), detection_results=json.dumps(detection_results.__dict__)))
+
+        return redirect(url_for('conclusions', conclusions=json.dumps(conclusions), detection_results=json.dumps(detection_results.__dict__), chatgpt_response=chatgpt_response))
     else:
         flash('File type not allowed')
         return redirect(request.url)
@@ -100,7 +123,8 @@ def conclusions():
     conclusions_json = request.args.get('conclusions')
     conclusions = json.loads(conclusions_json)
     detection_results_json = request.args.get('detection_results')
-    return render_template('conclusions.html', conclusions=conclusions, detection_results=detection_results_json)
+    chatgpt_response = request.args.get('chatgpt_response')
+    return render_template('conclusions.html', conclusions=conclusions, detection_results=detection_results_json, chatgpt_response=chatgpt_response)
 
 @app.route('/results')
 def results():
@@ -175,9 +199,8 @@ def generate_conclusions(detection_results):
         "domain_received": detection_results.domain_match[1]
     }
 
-    from_header_domain_name= detection_results.domain_match[0]
+    from_header_domain_name = detection_results.domain_match[0]
     received_header_domain_name = detection_results.domain_match[1]
-
 
     if not detection_results.spf_result or not detection_results.dkim_result or not detection_results.dmarc_result:
         conclusions["is_malicious"] = True
@@ -193,7 +216,7 @@ def generate_conclusions(detection_results):
             break
 
     for domain, analysis_result in detection_results.domain_results.items():
-        if analysis_result["positives"] > 0:
+        if analysis_result["positives"] > 2 and domain != "google.com":  # Min Threshold
             conclusions["is_malicious"] = True
             break
 
@@ -202,14 +225,14 @@ def generate_conclusions(detection_results):
             conclusions["is_malicious"] = True
             break
 
-    if from_header_domain_name != received_header_domain_name:
-        conclusions["is_malicious"] = True
-        conclusions['domain_match'] = False
-
+    its_google = False
     if from_header_domain_name == "gmail.com" and received_header_domain_name == "google.com":
-        conclusions["is_malicious"] = False
-        conclusions['domain_match'] = True
+        its_google = True
 
+    if from_header_domain_name != received_header_domain_name:
+        if not its_google:
+            conclusions["is_malicious"] = True
+            conclusions['domain_match'] = False
 
     return conclusions
 

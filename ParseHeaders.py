@@ -143,10 +143,6 @@ class ParseHeaders:
         from_header = self.headers.get('From', '')
         received_header = self.headers.get('Received', '')
 
-        # Debug: Print the From header
-        print(f"From header: {from_header}")
-        print(f"Received Header: {received_header}")
-
         # Extract domain from the From header
         from_domain_match = re.search(r'@([a-zA-Z0-9.-]+)', from_header)
         if from_domain_match:
@@ -154,8 +150,7 @@ class ParseHeaders:
         else:
             from_domain = ''
 
-        # Debug: Print the extracted from domain
-        print(f"Extracted From domain: {from_domain}")
+        # print(f"Extracted From domain: {from_domain}")
 
         # Extract domain from the Received header
         received_domain_match = re.search(r'from\s+([a-zA-Z0-9.-]+)', received_header, re.IGNORECASE)

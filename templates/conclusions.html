@@ -48,6 +48,21 @@
             display: block; /* Ensures each warning text is on a new line */
             margin-top: 5px; /* Adds a small space above each warning text */
         }
+        .chatgpt-response {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .highlight-title {
+            color: blue;
+            font-weight: bold;
+        }
+        .highlight-value {
+            font-size: 18px; /* Same as conclusion text */
+            display: inline;
+        }
     </style>
 </head>
 <body>
@@ -81,7 +96,7 @@
                         {% endif %}
                     {% endfor %}
                     {% for domain, result in conclusions.domain_results.items() %}
-                        {% if result.positives > 0 %}
+                        {% if result.positives > 2 and domain != "google.com" %}
                             <li>The Domain {{ domain }} has {{ result.positives }} positives</li>
                         {% endif %}
                     {% endfor %}
@@ -108,9 +123,15 @@
                 <p>The message is <strong>legitimate</strong> and not suspicious.</p>
             {% endif %}
         </div>
+
+        {% if not conclusions.spf_result %}
+            <div class="chatgpt-response">
+                <h2>Summary of Analysis</h2>
+                <p>{{ chatgpt_response | nl2br | format_chatgpt_response | safe }}</p>
+            </div>
+        {% endif %}
+
         <a href="{{ url_for('results', detection_results=detection_results) }}" class="btn-view-details">Display Advanced Scanning Results</a>
     </div>
 </body>
 </html>
-
-
