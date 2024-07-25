@@ -238,5 +238,5 @@ def generate_conclusions(detection_results):
     return conclusions
 
 if __name__ == '__main__':
-    app.secret_key = 'super_secret_key'
+    app.secret_key = config.APP_SECRET_KEY
     app.run(debug=False)
