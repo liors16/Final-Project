@@ -124,7 +124,7 @@
             {% endif %}
         </div>
 
-        {% if not conclusions.spf_result %}
+        {% if conclusions.is_malicious %}
             <div class="chatgpt-response">
                 <h2>Summary of Analysis</h2>
                 <p>{{ chatgpt_response | nl2br | format_chatgpt_response | safe }}</p>

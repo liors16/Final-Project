@@ -7,6 +7,7 @@ from Detections import Detections
 from AttackPathByGPT import AttackPathByGPT
 import config
 import re
+from DetectionsResults import DetectionResults
 
 app = Flask(__name__)
 app.config['ALLOWED_EXTENSIONS'] = {'eml'}
