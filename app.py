@@ -238,5 +238,6 @@ def generate_conclusions(detection_results):
     return conclusions
 
 if __name__ == '__main__':
+    # print()
     app.secret_key = config.APP_SECRET_KEY
     app.run(debug=False)
