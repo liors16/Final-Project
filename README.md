@@ -48,7 +48,7 @@ Python 3.7+
 pip install -r requirements.txt
 
 ## Setting up Environment Variables in "config.py" file:
-VIRUSTOTAL_API_KEY='your_virustotal_api_key'
-ABUSEIPDB_API_KEY='your_abuseipdb_api_key'
-OPENAI_API_KEY='your_openai_api_key'
+ - VIRUSTOTAL_API_KEY='your_virustotal_api_key'
+ - ABUSEIPDB_API_KEY='your_abuseipdb_api_key'
+ - OPENAI_API_KEY='your_openai_api_key'
 
