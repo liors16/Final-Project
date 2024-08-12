@@ -2,9 +2,9 @@
 
 ## Overview:
  - This project is a comprehensive email security analysis tool,
- - designed to detect and analyze potential threats within email messages. 
+   designed to detect and analyze potential threats within email messages. 
  - The system parses email headers, extracts critical information, performs security checks on links, 
- - IP addresses, attachments, and leverages advanced AI (GPT-4) to analyze potential attack paths.
+   IP addresses, attachments, and leverages advanced AI (GPT-4) to analyze potential attack paths.
 
 ## Features:
  - 1)Email Header Parsing: Extracts and processes email headers, message content, and attachments.
