@@ -1,17 +1,17 @@
 # Email Threats Analyzer and Detection Tool Project.
 
 ## Overview:
-This project is a comprehensive email security analysis tool,
-designed to detect and analyze potential threats within email messages. 
-The system parses email headers, extracts critical information, performs security checks on links, 
-IP addresses, attachments, and leverages advanced AI (GPT-4) to analyze potential attack paths.
+ - This project is a comprehensive email security analysis tool,
+ - designed to detect and analyze potential threats within email messages. 
+ - The system parses email headers, extracts critical information, performs security checks on links, 
+ - IP addresses, attachments, and leverages advanced AI (GPT-4) to analyze potential attack paths.
 
 ## Features:
-1)Email Header Parsing: Extracts and processes email headers, message content, and attachments.
-2)Link, IP, and Attachment Analysis: Utilizes the VirusTotal and AbuseIPDB API to scan links, IP addresses, and attachments for potential threats.
-3)SPF, DKIM, DMARC Checks: Validates the email's authenticity by checking SPF, DKIM, and DMARC results.
-4)AI-Driven Analysis: Uses GPT-4 to analyze the data and predict potential attack paths.
-5)Comprehensive Reporting: Organizes and stores analysis results in a structured manner for further review.
+ - 1)Email Header Parsing: Extracts and processes email headers, message content, and attachments.
+ - 2)Link, IP, and Attachment Analysis: Utilizes the VirusTotal and AbuseIPDB API to scan links, IP addresses, and attachments for potential threats.
+ - 3)SPF, DKIM, DMARC Checks: Validates the email's authenticity by checking SPF, DKIM, and DMARC results.
+ - 4)AI-Driven Analysis: Uses GPT-4 to analyze the data and predict potential attack paths.
+ - 5)Comprehensive Reporting: Organizes and stores analysis results in a structured manner for further review.
 
 ## Classes:
 
