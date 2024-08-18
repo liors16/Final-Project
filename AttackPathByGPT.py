@@ -51,7 +51,8 @@ class AttackPathByGPT:
         The DMARC Result: {dmarc_result}
         Attached Links and the number of engines that virus total identified the link as malicious: {links_analysis}
         The IP addresses and the number of engines that AbuseIPdb identified the address as malicious: {ips_analysis}
-        The first domain address is the address that appeared in the "from" header. The second domain address is the address that appeared in the "Received" Header: {domain_match}
+        The first domain address is the address that appeared in the "from" header. 
+        The second domain address is the address that appeared in the "Received" Header: {domain_match}.
         The files attached to the message and the number of engines that Virus Total identified the files as malicious: {attachments_analysis}
         """
 

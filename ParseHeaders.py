@@ -53,7 +53,7 @@ class ParseHeaders:
             f.write(part.get_payload(decode=True))
 
     def extract_links_from_message(self, message_content):
-        url_pattern = r'(?i)\b((?:https?|ftp|file):\/\/\S+|www\.\S+)\b'
+        url_pattern = r'(?i)\b((?:https?|ftp|file):\/\/\S+|www\.\S+|[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})\b'
         links = re.findall(url_pattern, message_content)
         for i, link in enumerate(links):
             if '"' in link:

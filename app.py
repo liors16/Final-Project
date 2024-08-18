@@ -85,7 +85,6 @@ def process_file(eml_file_path):
     header_parser = ParseHeaders(eml_file_path)
     detections_instance = Detections(header_parser, config.API_KEY_VIRUSTOTAL)
     detections_instance2 = Detections(header_parser, config.API_KEY_ABUSEIPDB)
-
     detection_results = DetectionResults()
 
     headers_dict, message_content = header_parser.parse_headers()
@@ -98,6 +97,9 @@ def process_file(eml_file_path):
     links = header_parser.extract_links_from_message(message_content)
     for link in links:
         detection_results.add_link(link)
+        link_analysis_result = detections_instance.check_attached_link(link) # Method to scan links
+        if link_analysis_result:
+            detection_results.add_link_result(link, link_analysis_result)
 
     ip_addresses = header_parser.extract_ip_addresses_from_received_headers()
     for ip in ip_addresses:
@@ -116,7 +118,6 @@ def process_file(eml_file_path):
     domain_analysis_result = detections_instance.check_domain(received_domain)
     if domain_analysis_result:
         detection_results.add_domain_result(received_domain, domain_analysis_result['positives'], domain_analysis_result['total'])
-
 
     if header_parser.attachments:
         for attachment_file_path in header_parser.attachments:
